@@ -1,474 +1,304 @@
-# Freelancer Time Tracker API
+# Freelance Time Tracker API
 
-A modern Laravel 12 API for freelancers to track time across clients and projects with advanced reporting capabilities.
+A comprehensive Laravel API that allows freelancers to log and manage their work time across clients and projects.
 
-## 🚀 Features
+## Features
 
-- **Authentication**: Laravel Sanctum token-based authentication
-- **Client Management**: Organize work by clients with contact information and hourly rates
-- **Project Tracking**: Manage multiple projects per client with status tracking
-- **Time Logging**: Start/stop timers or create manual time entries
-- **Advanced Reporting**: Generate reports by project, client, or date range
-- **PDF Exports**: Professional PDF reports with detailed time breakdowns
-- **Email Notifications**: Automatic alerts for 8+ hour workdays
-- **Modern Architecture**: Repository pattern, Service layer, and Event-driven design
+### Core Functionality
+- **User Authentication** - Register/Login/Logout via Laravel Sanctum
+- **Client Management** - Manage client information and contacts
+- **Project Management** - Create and manage projects for clients
+- **Time Tracking** - Start/stop timers and manual time entry
+- **Reporting** - Generate detailed reports with multiple grouping options
+- **PDF Export** - Export time reports as PDF documents
 
-## 📋 Requirements
+### Advanced Features
+- Real-time time tracking with start/stop functionality
+- Manual time log entries with validation
+- Comprehensive reporting system (project, client, daily, weekly)
+- PDF report generation with multiple grouping options
+- User-specific data isolation
+- Complete test coverage
 
-- PHP 8.2+
+## Tech Stack
+
+- **Backend**: Laravel 11
+- **Authentication**: Laravel Sanctum
+- **Database**: MySQL/SQLite
+- **PDF Generation**: DomPDF
+- **Testing**: PHPUnit
+- **API Documentation**: Postman Collection
+
+## Requirements
+
+- PHP 8.1+
 - Composer
-- SQLite/MySQL/PostgreSQL
-- Node.js (for frontend assets, optional)
+- MySQL 5.7+ or SQLite
+- Node.js & NPM (for asset compilation)
 
-## 🛠️ Installation
+## Installation
 
-### 1. Clone the Repository
-```bash
-git clone <repository-url>
-cd "Freelancer Time Tracker API"
-```
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd "Freelancer Time Tracker API"
+   ```
 
-### 2. Install Dependencies
-```bash
-composer install
-npm install  # Optional, for frontend assets
-```
+2. **Install dependencies**
+   ```bash
+   composer install
+   ```
 
-### 3. Environment Setup
-```bash
-cp .env.example .env
-php artisan key:generate
-```
+3. **Environment setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-### 4. Configure Database
-Edit `.env` file with your database credentials:
-```env
-DB_CONNECTION=sqlite
-DB_DATABASE=/absolute/path/to/database/database.sqlite
-```
+4. **Database configuration**
+   ```bash
+   # Configure your database in .env file
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=freelancer_time_tracker
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   ```
 
-For MySQL:
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=freelancer_tracker
-DB_USERNAME=root
-DB_PASSWORD=
-```
+5. **Run migrations and seeders**
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+   ```
 
-### 5. Run Migrations & Seed Data
-```bash
-php artisan migrate:fresh --seed
-```
-
-### 6. Start Development Server
-```bash
-php artisan serve
-```
+6. **Start the development server**
+   ```bash
+   php artisan serve
+   ```
 
 The API will be available at `http://localhost:8000`
 
-## 📊 Database Structure
+## Database Structure
 
-### Users Table
-- `id`, `name`, `email`, `password`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`
-
-### Clients Table
-- `id`, `user_id`, `name`, `email`, `phone`, `address`, `hourly_rate`, `status`, `created_at`, `updated_at`
-
-### Projects Table
-- `id`, `user_id`, `client_id`, `name`, `description`, `status`, `deadline`, `created_at`, `updated_at`
-
-### Time Logs Table
-- `id`, `user_id`, `project_id`, `description`, `start_time`, `end_time`, `hours`, `is_billable`, `tags`, `created_at`, `updated_at`
-
-## 🔐 Authentication
-
-### Register
-```http
-POST /api/register
-Content-Type: application/json
-
-{
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "password_confirmation": "password123"
-}
-```
-
-### Login
-```http
-POST /api/login
-Content-Type: application/json
-
-{
-    "email": "john@example.com",
-    "password": "password123"
-}
-```
-
-### Logout
-```http
-POST /api/logout
-Authorization: Bearer {token}
-```
-
-## 📚 API Endpoints
+### Users
+- `id` - Primary key
+- `name` - User's full name
+- `email` - Email address (unique)
+- `password` - Hashed password
+- `timestamps`
 
 ### Clients
-- `GET /api/clients` - List all clients
-- `POST /api/clients` - Create new client
-- `GET /api/clients/{id}` - Show client details
-- `PUT /api/clients/{id}` - Update client
-- `DELETE /api/clients/{id}` - Delete client
+- `id` - Primary key
+- `user_id` - Foreign key to users
+- `name` - Client company name
+- `email` - Client email
+- `contact_person` - Contact person name
+- `timestamps`
 
 ### Projects
-- `GET /api/projects` - List all projects
-- `POST /api/projects` - Create new project
-- `GET /api/projects/{id}` - Show project details
-- `PUT /api/projects/{id}` - Update project
-- `DELETE /api/projects/{id}` - Delete project
+- `id` - Primary key
+- `user_id` - Foreign key to users
+- `client_id` - Foreign key to clients
+- `title` - Project title
+- `description` - Project description
+- `status` - Project status (active, completed)
+- `deadline` - Project deadline
+- `timestamps`
 
 ### Time Logs
-- `GET /api/time-logs` - List time logs
-- `POST /api/time-logs` - Create time log
-- `GET /api/time-logs/{id}` - Show time log
-- `PUT /api/time-logs/{id}` - Update time log
-- `DELETE /api/time-logs/{id}` - Delete time log
-- `POST /api/time-logs/start` - Start a timer
-- `POST /api/time-logs/{id}/stop` - Stop a running timer
-- `GET /api/time-logs/running` - Get running timers
+- `id` - Primary key
+- `user_id` - Foreign key to users
+- `project_id` - Foreign key to projects
+- `start_time` - Start timestamp
+- `end_time` - End timestamp (nullable for running logs)
+- `description` - Work description
+- `hours` - Calculated hours (decimal)
+- `timestamps`
+
+## API Endpoints
+
+### Authentication
+```
+POST /api/auth/register     - Register new user
+POST /api/auth/login        - Login user
+POST /api/auth/logout       - Logout user
+GET  /api/auth/me           - Get current user
+```
+
+### Clients
+```
+GET    /api/clients         - Get all clients
+POST   /api/clients         - Create client
+GET    /api/clients/{id}    - Get specific client
+PUT    /api/clients/{id}    - Update client
+DELETE /api/clients/{id}    - Delete client
+```
+
+### Projects
+```
+GET    /api/projects        - Get all projects
+POST   /api/projects        - Create project
+GET    /api/projects/{id}   - Get specific project
+PUT    /api/projects/{id}   - Update project
+DELETE /api/projects/{id}   - Delete project
+```
+
+### Time Logs
+```
+GET    /api/time-logs           - Get all time logs
+POST   /api/time-logs           - Create manual time log
+GET    /api/time-logs/{id}      - Get specific time log
+PUT    /api/time-logs/{id}      - Update time log
+DELETE /api/time-logs/{id}      - Delete time log
+POST   /api/time-logs/start     - Start time tracking
+GET    /api/time-logs/running   - Get running time logs
+POST   /api/time-logs/{id}/stop - Stop time tracking
+```
 
 ### Reports
-- `GET /api/reports/time` - Generate time reports
-- `GET /api/reports/time/pdf` - Download PDF report
-
-## 📈 Report Examples
-
-### Time Report by Date Range
-```http
-GET /api/reports/time?from=2024-01-01&to=2024-01-31
-Authorization: Bearer {token}
+```
+GET /api/reports                    - Get reports (requires type parameter)
+GET /api/reports/summary            - Get user summary
+GET /api/reports/client/{id}        - Get client-specific report
+GET /api/reports/export/pdf         - Export PDF report
 ```
 
-### Time Report by Client
-```http
-GET /api/reports/time?client_id=1&from=2024-01-01&to=2024-01-31
-Authorization: Bearer {token}
-```
+#### Report Types
+- `project` - Hours grouped by project
+- `client` - Hours grouped by client
+- `daily` - Hours grouped by day
+- `weekly` - Hours grouped by week
 
-### Time Report by Project
-```http
-GET /api/reports/time?project_id=1&from=2024-01-01&to=2024-01-31
-Authorization: Bearer {token}
-```
+#### Report Filters
+- `from` - Start date (YYYY-MM-DD)
+- `to` - End date (YYYY-MM-DD)
+- `client_id` - Filter by specific client
+- `project_id` - Filter by specific project
 
-### PDF Export
-```http
-GET /api/reports/time/pdf?client_id=1&from=2024-01-01&to=2024-01-31
-Authorization: Bearer {token}
-```
+## Usage Examples
 
-## 🎯 Example Usage
-
-### Creating a Client
-```http
-POST /api/clients
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-    "name": "TechCorp Solutions",
-    "email": "contact@techcorp.com",
-    "phone": "+1-555-0123",
-    "address": "123 Tech Street, Silicon Valley, CA",
-    "hourly_rate": 75.00,
-    "status": "active"
-}
-```
-
-### Starting a Time Log
-```http
-POST /api/time-logs/start
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-    "project_id": 1,
-    "description": "Working on user authentication feature"
-}
-```
-
-### Creating Manual Time Entry
-```http
-POST /api/time-logs
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-    "project_id": 1,
-    "description": "Code review and testing",
-    "start_time": "2024-01-15 09:00:00",
-    "end_time": "2024-01-15 12:30:00",
-    "is_billable": true,
-    "tags": ["development", "testing"]
-}
-```
-
-## 🧪 Testing
-
-### Run All Tests
+### Authentication
 ```bash
+# Register
+curl -X POST http://localhost:8000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"John Doe","email":"john@example.com","password":"password123","password_confirmation":"password123"}'
+
+# Login
+curl -X POST http://localhost:8000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"john@example.com","password":"password123"}'
+```
+
+### Time Tracking
+```bash
+# Start tracking
+curl -X POST http://localhost:8000/api/time-logs/start \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"project_id":1,"description":"Working on homepage"}'
+
+# Stop tracking
+curl -X POST http://localhost:8000/api/time-logs/1/stop \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"description":"Completed homepage wireframes"}'
+```
+
+### Reports
+```bash
+# Get project reports
+curl -X GET "http://localhost:8000/api/reports?type=project&from=2025-01-01&to=2025-01-31" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Export PDF
+curl -X GET "http://localhost:8000/api/reports/export/pdf?group_by=project&start_date=2025-01-01&end_date=2025-01-31" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  --output report.pdf
+```
+
+## Testing
+
+Run the test suite:
+```bash
+# Run all tests
 php artisan test
-```
 
-### Run Specific Test Suite
-```bash
-php artisan test tests/Feature/AuthTest.php
-php artisan test tests/Feature/ClientTest.php
-php artisan test tests/Feature/ProjectTest.php
+# Run specific test file
 php artisan test tests/Feature/TimeLogTest.php
-php artisan test tests/Feature/ReportTest.php
+
+# Run with coverage
+php artisan test --coverage
 ```
 
-### Test Coverage
-The project includes comprehensive feature tests covering:
-- Authentication flows
-- CRUD operations for all entities
-- Authorization policies
-- Report generation
-- PDF export functionality
+## Postman Collection
 
-## 🔧 Development
-
-### Demo Users
-After running seeders, you can use these demo accounts:
-
-**Admin User:**
-- Email: `admin@freelancer-tracker.com`
-- Password: `password`
-
-**Freelancer User:**
-- Email: `john@freelancer-tracker.com`
-- Password: `password`
-
-### Seeded Data
-The seeders create:
-- 5 demo users
-- 2-4 clients per user
-- 2-3 projects per client
-- 10+ time logs with realistic data
-
-### Architecture
-
-**Controllers**: Handle HTTP requests and responses
+A comprehensive Postman collection is included at:
 ```
-app/Http/Controllers/
-├── Api/AuthController.php
-├── Api/ReportController.php
-├── ClientController.php
-├── ProjectController.php
-└── TimeLogController.php
+/postman/Freelancer-Time-Tracker-API.postman_collection.json
 ```
 
-**Form Requests**: Validate incoming data
-```
-app/Http/Requests/
-├── ClientRequest.php
-├── LoginRequest.php
-├── ProjectRequest.php
-├── RegisterRequest.php
-└── TimeLogRequest.php
-```
+### Collection Features
+- Pre-configured environment variables
+- Automatic token management
+- Complete API endpoint coverage
+- Sample request payloads
+- Multiple report examples
 
-**API Resources**: Transform model data for API responses
-```
-app/Http/Resources/
-├── ClientResource.php
-├── ProjectResource.php
-├── TimeLogResource.php
-└── UserResource.php
-```
+### Using the Collection
+1. Import the collection into Postman
+2. Update the `base_url` variable if needed (default: `http://localhost:8000/api`)
+3. Start with Authentication → Login to get a token
+4. All subsequent requests will automatically use the stored token
 
-**Actions**: Encapsulate business logic
-```
-app/Actions/
-├── Auth/
-│   ├── LoginUserAction.php
-│   └── RegisterUserAction.php
-└── TimeLog/
-    ├── StartTimeLogAction.php
-    └── StopTimeLogAction.php
-```
+## Seeded Data
 
-**Services**: Handle complex operations
-```
-app/Services/
-└── ReportService.php
-```
+The database seeder creates:
+- 1 test user (`test@example.com` / `password`)
+- 2 sample clients
+- 3 sample projects
+- 10+ time log entries
 
-**Policies**: Authorization logic
-```
-app/Policies/
-├── ClientPolicy.php
-├── ProjectPolicy.php
-└── TimeLogPolicy.php
+## Security Features
+
+- Laravel Sanctum token-based authentication
+- User-specific data isolation
+- Input validation on all endpoints
+- CSRF protection
+- Rate limiting on authentication endpoints
+
+## Error Handling
+
+The API returns consistent JSON error responses:
+```json
+{
+    "message": "Error description",
+    "errors": {
+        "field": ["Validation error message"]
+    }
+}
 ```
 
-## 📧 Email Notifications
-
-The system automatically sends email notifications when a user logs 8+ hours in a single day. Configure your mail settings in `.env`:
-
-```env
-MAIL_MAILER=smtp
-MAIL_HOST=mailpit
-MAIL_PORT=1025
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS="hello@freelancer-tracker.com"
-MAIL_FROM_NAME="${APP_NAME}"
-```
-
-## 📦 Postman Collection
-
-Import the Postman collection from `postman/Freelancer_Time_Tracker_API.postman_collection.json` to test all API endpoints with:
-- Pre-configured authentication
-- Example requests and responses
-- Environment variables for easy testing
-
-## 🚀 Deployment
-
-### Production Environment Variables
-```env
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://your-domain.com
-
-# Database
-DB_CONNECTION=mysql
-DB_HOST=your-db-host
-DB_DATABASE=your-db-name
-DB_USERNAME=your-db-user
-DB_PASSWORD=your-db-password
-
-# Mail
-MAIL_MAILER=smtp
-MAIL_HOST=your-smtp-host
-MAIL_PORT=587
-MAIL_USERNAME=your-smtp-user
-MAIL_PASSWORD=your-smtp-password
-MAIL_ENCRYPTION=tls
-```
-
-### Deployment Steps
-```bash
-# Install dependencies
-composer install --no-dev --optimize-autoloader
-
-# Generate application key
-php artisan key:generate
-
-# Run migrations
-php artisan migrate --force
-
-# Cache configuration
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Set proper permissions
-chmod -R 755 storage bootstrap/cache
-```
-
-## 🛡️ Security
-
-- All routes are protected by Sanctum authentication
-- Policy-based authorization ensures users can only access their own data
-- Input validation using Form Request classes
-- CSRF protection for web routes
-- SQL injection protection via Eloquent ORM
-
-## 📄 License
-
-This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📞 Support
-
-For support, email support@freelancer-tracker.com or create an issue in the repository.
-
----
-
-**Built with ❤️ using Laravel 12**
-
-## About Laravelcenter"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Common HTTP status codes:
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `422` - Validation Error
+- `500` - Server Error
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
