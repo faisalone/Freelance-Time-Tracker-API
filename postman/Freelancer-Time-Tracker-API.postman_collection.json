@@ -519,7 +519,7 @@
 			"name": "Reports",
 			"item": [
 				{
-					"name": "Get All Reports",
+					"name": "Get Project Reports",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -529,14 +529,28 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/reports",
+							"raw": "{{base_url}}/reports?type=project&from=2025-01-20&to=2025-02-20",
 							"host": ["{{base_url}}"],
-							"path": ["reports"]
+							"path": ["reports"],
+							"query": [
+								{
+									"key": "type",
+									"value": "project"
+								},
+								{
+									"key": "from",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "to",
+									"value": "2025-02-20"
+								}
+							]
 						}
 					}
 				},
 				{
-					"name": "Get Reports with Date Filter",
+					"name": "Get Client Reports",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -546,10 +560,76 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/reports?from=2025-01-20&to=2025-02-20",
+							"raw": "{{base_url}}/reports?type=client&from=2025-01-20&to=2025-02-20",
 							"host": ["{{base_url}}"],
 							"path": ["reports"],
 							"query": [
+								{
+									"key": "type",
+									"value": "client"
+								},
+								{
+									"key": "from",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "to",
+									"value": "2025-02-20"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Daily Reports",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports?type=daily&from=2025-01-20&to=2025-02-20",
+							"host": ["{{base_url}}"],
+							"path": ["reports"],
+							"query": [
+								{
+									"key": "type",
+									"value": "daily"
+								},
+								{
+									"key": "from",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "to",
+									"value": "2025-02-20"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Weekly Reports",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports?type=weekly&from=2025-01-20&to=2025-02-20",
+							"host": ["{{base_url}}"],
+							"path": ["reports"],
+							"query": [
+								{
+									"key": "type",
+									"value": "weekly"
+								},
 								{
 									"key": "from",
 									"value": "2025-01-20"
@@ -573,12 +653,51 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/reports?client_id=1&from=2025-01-20&to=2025-02-20",
+							"raw": "{{base_url}}/reports?type=project&client_id=1&from=2025-01-20&to=2025-02-20",
 							"host": ["{{base_url}}"],
 							"path": ["reports"],
 							"query": [
 								{
+									"key": "type",
+									"value": "project"
+								},
+								{
 									"key": "client_id",
+									"value": "1"
+								},
+								{
+									"key": "from",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "to",
+									"value": "2025-02-20"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Reports with Project Filter",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports?type=daily&project_id=1&from=2025-01-20&to=2025-02-20",
+							"host": ["{{base_url}}"],
+							"path": ["reports"],
+							"query": [
+								{
+									"key": "type",
+									"value": "daily"
+								},
+								{
+									"key": "project_id",
 									"value": "1"
 								},
 								{
@@ -604,14 +723,24 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/reports/summary",
+							"raw": "{{base_url}}/reports/summary?from=2025-01-20&to=2025-02-20",
 							"host": ["{{base_url}}"],
-							"path": ["reports", "summary"]
+							"path": ["reports", "summary"],
+							"query": [
+								{
+									"key": "from",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "to",
+									"value": "2025-02-20"
+								}
+							]
 						}
 					}
 				},
 				{
-					"name": "Get Client Report",
+					"name": "Get Specific Client Report",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -621,14 +750,24 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/reports/client/1",
+							"raw": "{{base_url}}/reports/client/1?from=2025-01-20&to=2025-02-20",
 							"host": ["{{base_url}}"],
-							"path": ["reports", "client", "1"]
+							"path": ["reports", "client", "1"],
+							"query": [
+								{
+									"key": "from",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "to",
+									"value": "2025-02-20"
+								}
+							]
 						}
 					}
 				},
 				{
-					"name": "Export PDF Report",
+					"name": "Export PDF Report - Project Grouped",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -638,16 +777,86 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/reports/export/pdf?from=2025-01-20&to=2025-02-20",
+							"raw": "{{base_url}}/reports/export/pdf?group_by=project&start_date=2025-01-20&end_date=2025-02-20",
 							"host": ["{{base_url}}"],
 							"path": ["reports", "export", "pdf"],
 							"query": [
 								{
-									"key": "from",
+									"key": "group_by",
+									"value": "project"
+								},
+								{
+									"key": "start_date",
 									"value": "2025-01-20"
 								},
 								{
-									"key": "to",
+									"key": "end_date",
+									"value": "2025-02-20"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Export PDF Report - Client Grouped",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/pdf"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/export/pdf?group_by=client&start_date=2025-01-20&end_date=2025-02-20&client_id=1",
+							"host": ["{{base_url}}"],
+							"path": ["reports", "export", "pdf"],
+							"query": [
+								{
+									"key": "group_by",
+									"value": "client"
+								},
+								{
+									"key": "start_date",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "end_date",
+									"value": "2025-02-20"
+								},
+								{
+									"key": "client_id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Export PDF Report - Daily Grouped",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/pdf"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/export/pdf?group_by=daily&start_date=2025-01-20&end_date=2025-02-20",
+							"host": ["{{base_url}}"],
+							"path": ["reports", "export", "pdf"],
+							"query": [
+								{
+									"key": "group_by",
+									"value": "daily"
+								},
+								{
+									"key": "start_date",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "end_date",
 									"value": "2025-02-20"
 								}
 							]
