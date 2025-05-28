@@ -29,6 +29,7 @@ class ProjectController extends Controller
             ->allowedFilters(['client_id', 'status', 'title'])
             ->allowedSorts(['title', 'deadline', 'created_at', 'status'])
             ->allowedIncludes(['client', 'timeLogs'])
+            ->with('client') // Always load client relationship
             ->withCount('timeLogs')
             ->paginate($request->query('per_page', 15));
 
@@ -104,8 +105,6 @@ class ProjectController extends Controller
 
         $project->delete();
 
-        return response()->json([
-            'message' => 'Project deleted successfully',
-        ]);
+        return response()->json(null, 204);
     }
 }

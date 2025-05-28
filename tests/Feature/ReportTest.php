@@ -16,24 +16,18 @@ class ReportTest extends TestCase
 
     protected User $user;
     protected Client $client;
-    protected Project $project;
-
-    protected function setUp(): void
+    protected Project $project;    protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
         $this->client = Client::factory()->create(['user_id' => $this->user->id]);
         $this->project = Project::factory()->create([
-            'user_id' => $this->user->id,
             'client_id' => $this->client->id
         ]);
         Sanctum::actingAs($this->user);
-    }
-
-    public function test_can_get_project_reports(): void
+    }    public function test_can_get_project_reports(): void
     {
         TimeLog::factory()->count(3)->create([
-            'user_id' => $this->user->id,
             'project_id' => $this->project->id
         ]);
 
@@ -46,12 +40,9 @@ class ReportTest extends TestCase
                     '*' => ['project_id', 'project_name', 'client_name', 'total_hours']
                 ]
             ]);
-    }
-
-    public function test_can_get_client_reports(): void
+    }    public function test_can_get_client_reports(): void
     {
         TimeLog::factory()->count(3)->create([
-            'user_id' => $this->user->id,
             'project_id' => $this->project->id
         ]);
 
@@ -69,7 +60,6 @@ class ReportTest extends TestCase
     public function test_can_get_daily_reports(): void
     {
         TimeLog::factory()->count(3)->create([
-            'user_id' => $this->user->id,
             'project_id' => $this->project->id
         ]);
 
@@ -87,7 +77,6 @@ class ReportTest extends TestCase
     public function test_can_get_weekly_reports(): void
     {
         TimeLog::factory()->count(3)->create([
-            'user_id' => $this->user->id,
             'project_id' => $this->project->id
         ]);
 
@@ -105,7 +94,6 @@ class ReportTest extends TestCase
     public function test_can_get_user_summary(): void
     {
         TimeLog::factory()->count(5)->create([
-            'user_id' => $this->user->id,
             'project_id' => $this->project->id
         ]);
 
@@ -126,13 +114,11 @@ class ReportTest extends TestCase
     public function test_can_filter_reports_by_date_range(): void
     {
         TimeLog::factory()->create([
-            'user_id' => $this->user->id,
             'project_id' => $this->project->id,
             'start_time' => '2025-05-01 09:00:00'
         ]);
 
         TimeLog::factory()->create([
-            'user_id' => $this->user->id,
             'project_id' => $this->project->id,
             'start_time' => '2025-05-15 09:00:00'
         ]);
@@ -146,7 +132,6 @@ class ReportTest extends TestCase
     public function test_can_get_client_specific_report(): void
     {
         TimeLog::factory()->count(3)->create([
-            'user_id' => $this->user->id,
             'project_id' => $this->project->id
         ]);
 
@@ -162,7 +147,6 @@ class ReportTest extends TestCase
     public function test_can_export_pdf_report(): void
     {
         TimeLog::factory()->count(3)->create([
-            'user_id' => $this->user->id,
             'project_id' => $this->project->id
         ]);
 

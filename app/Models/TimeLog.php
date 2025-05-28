@@ -80,6 +80,14 @@ class TimeLog extends Model
     }
 
     /**
+     * Scope a query to only include completed time logs.
+     */
+    public function scopeCompleted($query)
+    {
+        return $query->whereNotNull('start_time')->whereNotNull('end_time');
+    }
+
+    /**
      * Scope a query to only include billable time logs.
      */
     public function scopeBillable($query)

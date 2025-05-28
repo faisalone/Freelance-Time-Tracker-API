@@ -30,6 +30,7 @@ class TimeLogController extends Controller
         $user = $request->user();
         
         $timeLogs = QueryBuilder::for(TimeLog::class)
+            ->with(['project.client'])
             ->whereHas('project.client', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
@@ -58,9 +59,11 @@ class TimeLogController extends Controller
         $this->authorize('view', $project->client);
 
         $data = $request->validated();
-        
+        // Ensure start_time is set for running logs
+        if (empty($data['start_time']) && empty($data['end_time'])) {
+            $data['start_time'] = now();
+        }
         $timeLog = TimeLog::create($data);
-        
         // Calculate hours if both start and end times are provided
         if ($timeLog->start_time && $timeLog->end_time) {
             $timeLog->calculateHours();
@@ -115,9 +118,7 @@ class TimeLogController extends Controller
 
         $timeLog->delete();
 
-        return response()->json([
-            'message' => 'Time log deleted successfully',
-        ]);
+        return response()->json(null, 204);
     }
 
     /**

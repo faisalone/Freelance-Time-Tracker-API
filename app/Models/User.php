@@ -66,10 +66,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all time logs through client projects.
+     * Get all time logs for the user through their client projects.
      */
-    public function timeLogs(): HasManyThrough
+    public function timeLogs()
     {
-        return $this->hasManyThrough(TimeLog::class, Project::class, 'client_id', 'project_id', 'id', 'id');
+        return TimeLog::whereHas('project.client', function ($query) {
+            $query->where('user_id', $this->id);
+        });
     }
 }

@@ -1,0 +1,660 @@
+{
+	"info": {
+		"_postman_id": "freelancer-time-tracker-api",
+		"name": "Freelancer Time Tracker API",
+		"description": "Complete API collection for the Freelancer Time Tracker application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('token', response.token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/me",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "me"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Clients",
+			"item": [
+				{
+					"name": "Get All Clients",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/clients",
+							"host": ["{{base_url}}"],
+							"path": ["clients"]
+						}
+					}
+				},
+				{
+					"name": "Create Client",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Acme Corporation\",\n    \"email\": \"contact@acme.com\",\n    \"contact_person\": \"Jane Smith\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/clients",
+							"host": ["{{base_url}}"],
+							"path": ["clients"]
+						}
+					}
+				},
+				{
+					"name": "Get Client",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/clients/1",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Client",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Acme Corporation Updated\",\n    \"email\": \"new-contact@acme.com\",\n    \"contact_person\": \"John Smith\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/clients/1",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Client",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/clients/1",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Get All Projects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/projects",
+							"host": ["{{base_url}}"],
+							"path": ["projects"]
+						}
+					}
+				},
+				{
+					"name": "Create Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Website Redesign\",\n    \"description\": \"Complete redesign of company website\",\n    \"client_id\": 1,\n    \"status\": \"active\",\n    \"deadline\": \"2025-12-31\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/projects",
+							"host": ["{{base_url}}"],
+							"path": ["projects"]
+						}
+					}
+				},
+				{
+					"name": "Get Project",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/projects/1",
+							"host": ["{{base_url}}"],
+							"path": ["projects", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Project",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Website Redesign - Updated\",\n    \"description\": \"Complete redesign with mobile optimization\",\n    \"client_id\": 1,\n    \"status\": \"completed\",\n    \"deadline\": \"2025-11-30\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/projects/1",
+							"host": ["{{base_url}}"],
+							"path": ["projects", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/projects/1",
+							"host": ["{{base_url}}"],
+							"path": ["projects", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Time Logs",
+			"item": [
+				{
+					"name": "Start Time Log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"project_id\": 1,\n    \"description\": \"Working on homepage design\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/time-logs/start",
+							"host": ["{{base_url}}"],
+							"path": ["time-logs", "start"]
+						}
+					}
+				},
+				{
+					"name": "Get Running Time Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/time-logs/running",
+							"host": ["{{base_url}}"],
+							"path": ["time-logs", "running"]
+						}
+					}
+				},
+				{
+					"name": "Stop Time Log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Completed homepage wireframes\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/time-logs/1/stop",
+							"host": ["{{base_url}}"],
+							"path": ["time-logs", "1", "stop"]
+						}
+					}
+				},
+				{
+					"name": "Get All Time Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/time-logs",
+							"host": ["{{base_url}}"],
+							"path": ["time-logs"]
+						}
+					}
+				},
+				{
+					"name": "Create Manual Time Log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"project_id\": 1,\n    \"start_time\": \"2025-01-20 09:00:00\",\n    \"end_time\": \"2025-01-20 17:00:00\",\n    \"description\": \"Manual entry for yesterday's work\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/time-logs",
+							"host": ["{{base_url}}"],
+							"path": ["time-logs"]
+						}
+					}
+				},
+				{
+					"name": "Get Time Log",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/time-logs/1",
+							"host": ["{{base_url}}"],
+							"path": ["time-logs", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Time Log",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"project_id\": 1,\n    \"start_time\": \"2025-01-20 09:00:00\",\n    \"end_time\": \"2025-01-20 18:00:00\",\n    \"description\": \"Updated description with more details\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/time-logs/1",
+							"host": ["{{base_url}}"],
+							"path": ["time-logs", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Time Log",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/time-logs/1",
+							"host": ["{{base_url}}"],
+							"path": ["time-logs", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Get All Reports",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports",
+							"host": ["{{base_url}}"],
+							"path": ["reports"]
+						}
+					}
+				},
+				{
+					"name": "Get Reports with Date Filter",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports?from=2025-01-20&to=2025-02-20",
+							"host": ["{{base_url}}"],
+							"path": ["reports"],
+							"query": [
+								{
+									"key": "from",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "to",
+									"value": "2025-02-20"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Reports with Client Filter",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports?client_id=1&from=2025-01-20&to=2025-02-20",
+							"host": ["{{base_url}}"],
+							"path": ["reports"],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "1"
+								},
+								{
+									"key": "from",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "to",
+									"value": "2025-02-20"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Summary Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/summary",
+							"host": ["{{base_url}}"],
+							"path": ["reports", "summary"]
+						}
+					}
+				},
+				{
+					"name": "Get Client Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/client/1",
+							"host": ["{{base_url}}"],
+							"path": ["reports", "client", "1"]
+						}
+					}
+				},
+				{
+					"name": "Export PDF Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/pdf"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/export/pdf?from=2025-01-20&to=2025-02-20",
+							"host": ["{{base_url}}"],
+							"path": ["reports", "export", "pdf"],
+							"query": [
+								{
+									"key": "from",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "to",
+									"value": "2025-02-20"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

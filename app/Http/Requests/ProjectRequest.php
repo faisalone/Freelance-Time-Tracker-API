@@ -21,11 +21,13 @@ class ProjectRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isUpdate = $this->isMethod('PUT') || $this->isMethod('PATCH');
+        
         return [
-            'client_id' => ['required', 'exists:clients,id'],
-            'title' => ['required', 'string', 'max:255'],
+            'client_id' => [$isUpdate ? 'sometimes' : 'required', 'exists:clients,id'],
+            'title' => [$isUpdate ? 'sometimes' : 'required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'status' => ['required', 'in:active,completed'],
+            'status' => [$isUpdate ? 'sometimes' : 'required', 'in:active,completed'],
             'deadline' => ['nullable', 'date', 'after:today'],
         ];
     }

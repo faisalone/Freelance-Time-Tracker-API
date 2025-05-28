@@ -29,6 +29,7 @@ class ClientFactory extends Factory
             'user_id' => User::factory(),
             'name' => fake()->company(),
             'email' => fake()->unique()->companyEmail(),
+            'contact_person' => fake()->name(),
             'phone' => fake()->phoneNumber(),
             'address' => fake()->address(),
             'hourly_rate' => fake()->randomFloat(2, 25, 150),

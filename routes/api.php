@@ -30,17 +30,18 @@ Route::middleware('auth:sanctum')->group(function () {
     // Resource routes
     Route::apiResource('clients', ClientController::class);
     Route::apiResource('projects', ProjectController::class);
-    Route::apiResource('time-logs', TimeLogController::class);
-
-    // Time log specific actions
+    
+    // Time log specific actions (must come before apiResource)
     Route::prefix('time-logs')->group(function () {
         Route::post('start', [TimeLogController::class, 'start'])
             ->name('time-logs.start');
-        Route::post('stop/{timeLog}', [TimeLogController::class, 'stop'])
-            ->name('time-logs.stop');
         Route::get('running', [TimeLogController::class, 'running'])
             ->name('time-logs.running');
+        Route::post('{timeLog}/stop', [TimeLogController::class, 'stop'])
+            ->name('time-logs.stop');
     });
+    
+    Route::apiResource('time-logs', TimeLogController::class);
 
     // Reports routes
     Route::prefix('reports')->group(function () {

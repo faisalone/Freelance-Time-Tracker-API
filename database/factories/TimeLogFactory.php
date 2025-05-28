@@ -31,13 +31,16 @@ class TimeLogFactory extends Factory
             ? fake()->dateTimeBetween($startTime, $startTime->format('Y-m-d 23:59:59'))
             : null;
 
+        $hours = $endTime ? round(($endTime->getTimestamp() - $startTime->getTimestamp()) / 3600, 2) : null;
+
         return [
-            'user_id' => User::factory(),
             'project_id' => Project::factory(),
             'description' => fake()->sentence(),
             'start_time' => $startTime,
             'end_time' => $endTime,
-            'hours' => $endTime ? round(($endTime->getTimestamp() - $startTime->getTimestamp()) / 3600, 2) : null,
+            'hours' => $hours,
+            'is_billable' => fake()->boolean(80),
+            'tags' => fake()->randomElements(['development', 'design', 'testing', 'meeting', 'research', 'documentation'], fake()->numberBetween(0, 3)),
             'created_at' => $startTime,
         ];
     }

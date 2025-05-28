@@ -21,7 +21,7 @@ class ClientRequest extends FormRequest
      */
     public function rules(): array
     {
-        $clientId = $this->route('client');
+        $clientId = $this->route('client') ? $this->route('client')->id : null;
         
         return [
             'name' => ['required', 'string', 'max:255'],
